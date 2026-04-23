@@ -70,28 +70,28 @@
 
 ### 3. 코드 실행 흐름 (Execution Flow) ###
 Step 1: 초기화 (__init__)
-드롭다운 메뉴(사람/봇 수 설정) 초기화.
+- 드롭다운 메뉴(사람/봇 수 설정) 초기화.
 
-상태 변수(일시정지 여부, 타이머 등) 기본값 설정.
+- 상태 변수(일시정지 여부, 타이머 등) 기본값 설정.
 
-show_setup_screen 호출을 통해 초기 설정 화면 출력.
+- show_setup_screen 호출을 통해 초기 설정 화면 출력.
 
 Step 2: 게임 시작 (start_game → init_game_state)
-설정된 인원만큼 플레이어 딕셔너리를 생성하여 리스트(self.players)에 저장.
+- 설정된 인원만큼 플레이어 딕셔너리를 생성하여 리스트(self.players)에 저장.
 
-active_idx = 0으로 첫 번째 순서를 지정하고 게임 화면(show_game_screen)으로 전환.
+- active_idx = 0으로 첫 번째 순서를 지정하고 게임 화면(show_game_screen)으로 전환.
 
 Step 3: 게임 루프 (execute_roll → process_roll_logic)
-투구 실행: random.randint를 통해 남은 핀 중 무작위로 쓰러뜨림.
+- 투구 실행: random.randint를 통해 남은 핀 중 무작위로 쓰러뜨림.
 
-로직 처리: process_roll_logic에서 현재 투구 결과에 따라 프레임을 넘길지, 추가 투구를 할지 결정.
+- 로직 처리: process_roll_logic에서 현재 투구 결과에 따라 프레임을 넘길지, 추가 투구를 할지 결정.
 
-UI 업데이트: 점수판(update_game_ui)과 핀 그래픽(🔴/⚪) 갱신.
+- UI 업데이트: 점수판(update_game_ui)과 핀 그래픽(🔴/⚪) 갱신.
 
-턴 전환: 투구가 끝나면 advance_turn을 통해 다음 플레이어로 인덱스 변경.
+- 턴 전환: 투구가 끝나면 advance_turn을 통해 다음 플레이어로 인덱스 변경.
 
 Step 4: 특수 기능 (Pause & Confirmation)
-UI 교체 방식: Flet의 self.controls 리스트를 통째로 갈아끼우는 방식으로 일시정지 및 확인 창을 구현하여, 모달 팝업 시 발생할 수 있는 프리징 현상을 방지합니다.
+- UI 교체 방식: Flet의 self.controls 리스트를 통째로 갈아끼우는 방식으로 일시정지 및 확인 창을 구현하여, 모달 팝업 시 발생할 수 있는 프리징 현상을 방지합니다.
 
 ---
 ### 4. 핵심 함수별 역할 ###
