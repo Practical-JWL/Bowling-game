@@ -3,7 +3,7 @@
 🎳 볼링 300 시뮬레이터: 코드 로직 및 구조 정리
 본 문서는 **Flet(Python UI Framework)**을 활용하여 제작된 멀티플레이어 볼링 시뮬레이터의 핵심 로직과 코드 실행 순서를 정리한 가이드입니다.
 
-1. 볼링 게임 핵심 규칙 (Domain Logic)
+### 1. 볼링 게임 핵심 규칙 (Domain Logic) ###
 코드 내에 구현된 볼링 점수 계산 및 진행 규칙입니다.
 
 📋 프레임 및 투구 규칙
@@ -29,3 +29,45 @@
 스페어: 10점 + 다음 1번의 투구 점수 합산.
 
 오픈: 스트라이크/스페어 실패 시 해당 프레임에서 쓰러뜨린 핀 수만 합산.
+
+---
+### 2. 데이터 구조: 플레이어 객체 (create_player_dict) ###
+각 플레이어의 상태는 Python 딕셔너리로 관리되어 멀티플레이 환경을 지원합니다.
+'''
+{
+    "name": "플레이어 이름",
+    "is_bot": True/False,      # 봇 여부
+    "rolls": [],               # 모든 투구의 쓰러진 핀 수 기록 (리스트)
+    "current_frame": 1,        # 현재 진행 중인 프레임 (1-10)
+    "current_roll": 1,         # 현재 프레임 내 투구 차례 (1-3)
+    "pins": [1, 2, ..., 10],   # 현재 남은 핀 번호 목록
+    "game_over": False         # 개인 게임 종료 여부
+}
+'''
+
+---
+### 3. 코드 실행 흐름 (Execution Flow) ###
+Step 1: 초기화 (__init__)
+드롭다운 메뉴(사람/봇 수 설정) 초기화.
+
+상태 변수(일시정지 여부, 타이머 등) 기본값 설정.
+
+show_setup_screen 호출을 통해 초기 설정 화면 출력.
+
+Step 2: 게임 시작 (start_game → init_game_state)
+설정된 인원만큼 플레이어 딕셔너리를 생성하여 리스트(self.players)에 저장.
+
+active_idx = 0으로 첫 번째 순서를 지정하고 게임 화면(show_game_screen)으로 전환.
+
+Step 3: 게임 루프 (execute_roll → process_roll_logic)
+투구 실행: random.randint를 통해 남은 핀 중 무작위로 쓰러뜨림.
+
+로직 처리: process_roll_logic에서 현재 투구 결과에 따라 프레임을 넘길지, 추가 투구를 할지 결정.
+
+UI 업데이트: 점수판(update_game_ui)과 핀 그래픽(🔴/⚪) 갱신.
+
+턴 전환: 투구가 끝나면 advance_turn을 통해 다음 플레이어로 인덱스 변경.
+
+Step 4: 특수 기능 (Pause & Confirmation)
+UI 교체 방식: Flet의 self.controls 리스트를 통째로 갈아끼우는 방식으로 일시정지 및 확인 창을 구현하여, 모달 팝업 시 발생할 수 있는 프리징 현상을 방지합니다.
+
